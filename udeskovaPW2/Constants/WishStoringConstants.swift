@@ -8,7 +8,13 @@
 import UIKit
 
 enum WishStoringConstants {
-    static let topOffset: CGFloat = 16
-    static let rightOffset: CGFloat = 16
+    static let topOffset: CGFloat = 20
+    static let rightOffset: CGFloat = 20
+    static let tableTopOffset: CGFloat = 20
+    static let tableBottomOffset: CGFloat = 30
+    static let tableLeftOffset: CGFloat = 20
+    static let tableRightOffset: CGFloat = 20
+    static let tableCornerRadius: CGFloat = 8
+    
     static let closeText: String = "Close"
 }
