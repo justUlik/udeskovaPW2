@@ -10,6 +10,7 @@ import UIKit
 final class WishStoringViewController: UIViewController {
     private let table: UITableView = UITableView(frame: .zero)
     private let closeButton = UIButton(type: .system)
+    private var wishArray: [String] = ["I wish to add cells to the table"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,7 @@ final class WishStoringViewController: UIViewController {
         configureCloseButton()
         configureTable()
     }
+
     
     private func configureUI() {
         view.backgroundColor = .cyan
@@ -33,6 +35,7 @@ final class WishStoringViewController: UIViewController {
     }
     
     private func configureTable() {
+        table.register(WrittenWishCell.self, forCellReuseIdentifier: WrittenWishCell.reuseId)
         view.addSubview(table)
         table.backgroundColor = .red
         table.dataSource = self
@@ -54,12 +57,13 @@ final class WishStoringViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension WishStoringViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return wishArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: WrittenWishCell.reuseId, for: indexPath) as! WrittenWishCell
+        cell.configure(with: wishArray[indexPath.row])
+        return cell
     }
-    
-    
+
 }
