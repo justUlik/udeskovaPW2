@@ -18,6 +18,7 @@ final class WishMakerViewController: UIViewController {
         return button
     }()
     private let stack = UIStackView()
+    private let addWishButton: UIButton = UIButton(type: .system)
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -30,6 +31,7 @@ final class WishMakerViewController: UIViewController {
         view.backgroundColor = .systemOrange
         
         configureHeading()
+        configureAddWishButton()
         configureSliders()
         configureToggleButton()
     }
@@ -39,6 +41,20 @@ final class WishMakerViewController: UIViewController {
         headingView.pinLeft(to: view)
         headingView.pinRight(to: view)
         headingView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+    }
+    
+    private func configureAddWishButton() {
+        view.addSubview(addWishButton)
+        addWishButton.setHeight(AddWishButtonConstants.buttonHeight)
+        addWishButton.pinBottom(to: view, AddWishButtonConstants.buttonBottom)
+        addWishButton.pinHorizontal(to: view, AddWishButtonConstants.buttonSide)
+        
+        addWishButton.backgroundColor = .white
+        addWishButton.setTitleColor(.systemPink, for: .normal)
+        addWishButton.setTitle(AddWishButtonConstants.buttonText, for: .normal)
+        
+        addWishButton.layer.cornerRadius = AddWishButtonConstants.buttonRadius
+        addWishButton.addTarget(self, action: #selector(addWishButtonPressed), for: .touchUpInside)
     }
     
     private func configureSliders() {
@@ -57,8 +73,9 @@ final class WishMakerViewController: UIViewController {
         
         stack.pinCenterX(to: view)
         stack.pinLeft(to: view, SliderConstants.stackLeading)
-        stack.pinBottom(to: view, -1 * SliderConstants.stackBottom)
         
+        stack.pinBottom(to: addWishButton.topAnchor, SliderConstants.stackBottomOffset)
+
         sliderRed.valueChanged = { [weak self] value in
             self?.colorModel.red = Float(value)
             self?.updateBackgroundColor()
@@ -85,6 +102,7 @@ final class WishMakerViewController: UIViewController {
         
         toggleButton.addTarget(self, action: #selector(toggleSliders), for: .touchUpInside)
     }
+
     
     // MARK: - Private Methods: Update Methods
     private func updateBackgroundColor() {
@@ -97,5 +115,10 @@ final class WishMakerViewController: UIViewController {
         stack.isHidden = !isHidden
         let newTitle = isHidden ? ToggleConstants.toggleButtonTitleHide : ToggleConstants.toggleButtonTitleShow
         toggleButton.setTitle(newTitle, for: .normal)
+    }
+    
+    @objc
+    private func addWishButtonPressed() {
+    // this will be done later!
     }
 }

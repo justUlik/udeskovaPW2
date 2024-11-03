@@ -29,4 +29,5 @@ enum SliderConstants {
     static let sliderBottomOffset: CGFloat = -10
     static let sliderLeadingOffset: CGFloat = 20
     static let sliderCenterXOffset: CGFloat = 0
+    static let stackBottomOffset: CGFloat = 8
 }
