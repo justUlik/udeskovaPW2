@@ -8,62 +8,71 @@
 import UIKit
 
 final class WishStoringViewController: UIViewController {
-    private let table: UITableView = UITableView(frame: .zero)
-    private let closeButton = UIButton(type: .system)
-    private var wishArray: [String] = ["I wish to add cells to the table"]
+    private var wishModel = WishModel()
+    private let wishTableView = WishTableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureUI()
-        configureCloseButton()
-        configureTable()
+        configureView()
+        configureTableView()
     }
+    
+    private func configureView() {
+        view.addSubview(wishTableView)
+        wishTableView.delegate = self
+        wishTableView.frame = view.bounds
+        wishTableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+    
+    private func configureTableView() {
+        wishTableView.table.dataSource = self
+        wishTableView.table.register(WrittenWishCell.self, forCellReuseIdentifier: WrittenWishCell.reuseId)
+        wishTableView.table.register(AddWishCell.self, forCellReuseIdentifier: AddWishCell.reuseId)
+    }
+}
 
-    
-    private func configureUI() {
-        view.backgroundColor = .cyan
-    }
-    
-    private func configureCloseButton() {
-        closeButton.setTitle(WishStoringConstants.closeText, for: .normal)
-        closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
-        
-        view.addSubview(closeButton)
-        closeButton.pinTop(to: view.safeAreaLayoutGuide.topAnchor, WishStoringConstants.topOffset)
-        closeButton.pinRight(to: view.trailingAnchor, WishStoringConstants.rightOffset)
-    }
-    
-    private func configureTable() {
-        table.register(WrittenWishCell.self, forCellReuseIdentifier: WrittenWishCell.reuseId)
-        view.addSubview(table)
-        table.backgroundColor = .red
-        table.dataSource = self
-        table.separatorStyle = .none
-        table.layer.cornerRadius = WishStoringConstants.tableCornerRadius
-        table.pinTop(to: closeButton.bottomAnchor, WishStoringConstants.tableTopOffset)
-        table.pinLeft(to: view, WishStoringConstants.tableLeftOffset)
-        table.pinRight(to: view, WishStoringConstants.tableRightOffset)
-        table.pinBottom(to: view, WishStoringConstants.tableBottomOffset)
-    }
-
-    @objc
-    private func closeButtonPressed() {
+// MARK: - WishTableViewDelegate
+extension WishStoringViewController: WishTableViewDelegate {
+    func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 }
 
-
 // MARK: - UITableViewDataSource
 extension WishStoringViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return WishStoringConstants.numberOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return wishArray.count
+        switch section {
+        case 0:
+            return wishModel.wishes.count
+        case 1:
+            return WishStoringConstants.numberRowsAddWishCell
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: WrittenWishCell.reuseId, for: indexPath) as! WrittenWishCell
-        cell.configure(with: wishArray[indexPath.row])
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: WrittenWishCell.reuseId, for: indexPath) as! WrittenWishCell
+            cell.configure(with: wishModel.wishes[indexPath.row])
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddWishCell.reuseId, for: indexPath) as! AddWishCell
+            cell.addWish = { [weak self] newWish in
+                guard let self = self else { return }
+                self.wishModel.wishes.append(newWish)
+                self.wishTableView.table.reloadData()
+            }
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
-
 }
+

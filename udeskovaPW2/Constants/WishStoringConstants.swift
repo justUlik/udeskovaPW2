@@ -14,7 +14,10 @@ enum WishStoringConstants {
     static let tableBottomOffset: CGFloat = 30
     static let tableLeftOffset: CGFloat = 20
     static let tableRightOffset: CGFloat = 20
-    static let tableCornerRadius: CGFloat = 8
+    static let tableCornerRadius: CGFloat = 10
     
     static let closeText: String = "Close"
+    
+    static let numberOfSections: Int = 2
+    static let numberRowsAddWishCell: Int = 1
 }

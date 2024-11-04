@@ -12,7 +12,7 @@ final class WrittenWishCell: UITableViewCell {
     
     private enum Constants {
         static let wrapColor: UIColor = .white
-        static let wrapRadius: CGFloat = 16
+        static let wrapRadius: CGFloat = 10
         static let wrapOffsetV: CGFloat = 5
         static let wrapOffsetH: CGFloat = 10
         static let wishLabelOffset: CGFloat = 8
