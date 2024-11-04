@@ -8,11 +8,14 @@
 import UIKit
 
 final class WishTableView: UIView {
+    // MARK: - Fields
     let table: UITableView = UITableView(frame: .zero)
     let closeButton = UIButton(type: .system)
-    
+
+    // MARK: - Properties
     weak var delegate: WishTableViewDelegate?
     
+    // MARK: - Lifecycle methods
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -23,7 +26,8 @@ final class WishTableView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Private methods
     private func configureUI() {
         backgroundColor = .systemGray6
     }
@@ -49,6 +53,7 @@ final class WishTableView: UIView {
         table.pinBottom(to: self, WishStoringConstants.tableBottomOffset)
     }
 
+    // MARK: - Button Actions
     @objc
     private func closeButtonPressed() {
         delegate?.closeButtonTapped()

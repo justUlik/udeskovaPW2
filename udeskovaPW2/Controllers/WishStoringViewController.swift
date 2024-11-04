@@ -8,16 +8,19 @@
 import UIKit
 
 final class WishStoringViewController: UIViewController {
+    // MARK: - Fields
     private var wishModel = WishModel()
     private let wishTableView = WishTableView()
     
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureView()
         configureTableView()
+        loadWishes()
     }
-    
+
+    // MARK: - Private methods
     private func configureView() {
         view.addSubview(wishTableView)
         wishTableView.delegate = self
@@ -29,6 +32,10 @@ final class WishStoringViewController: UIViewController {
         wishTableView.table.dataSource = self
         wishTableView.table.register(WrittenWishCell.self, forCellReuseIdentifier: WrittenWishCell.reuseId)
         wishTableView.table.register(AddWishCell.self, forCellReuseIdentifier: AddWishCell.reuseId)
+    }
+    
+    private func loadWishes() {
+        wishTableView.table.reloadData()
     }
 }
 
@@ -66,7 +73,7 @@ extension WishStoringViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: AddWishCell.reuseId, for: indexPath) as! AddWishCell
             cell.addWish = { [weak self] newWish in
                 guard let self = self else { return }
-                self.wishModel.wishes.append(newWish)
+                self.wishModel.addWish(newWish)
                 self.wishTableView.table.reloadData()
             }
             return cell
@@ -75,4 +82,3 @@ extension WishStoringViewController: UITableViewDataSource {
         }
     }
 }
-

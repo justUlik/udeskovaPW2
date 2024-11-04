@@ -8,12 +8,13 @@
 import UIKit
 
 final class AddWishCell: UITableViewCell {
+    // MARK: - Fields
     static let reuseId = "AddWishCell"
-    
+
     private let wishTextView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .systemGray6
-        textView.layer.cornerRadius = 8
+        textView.layer.cornerRadius = AddWishButtonConstants.buttonRadius
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -25,24 +26,25 @@ final class AddWishCell: UITableViewCell {
         return button
     }()
     
+    // MARK: - Properties
     var addWish: ((String) -> Void)?
-    
+
+    // MARK: - Lifecycle methods
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Private methods
     private func configureUI() {
         selectionStyle = .none
         contentView.addSubview(wishTextView)
         contentView.addSubview(addButton)
-        
-    
+
         wishTextView.pinTop(to: contentView, AddWishCellConstants.wishTextViewTopInset)
         wishTextView.pinLeft(to: contentView, AddWishCellConstants.wishTextViewSideInset)
         wishTextView.pinRight(to: contentView, AddWishCellConstants.wishTextViewSideInset)
@@ -53,14 +55,14 @@ final class AddWishCell: UITableViewCell {
         addButton.pinBottom(to: contentView, AddWishCellConstants.addButtonBottomInset)
         addButton.setHeight(mode: .equal, AddWishCellConstants.addButtonHeight)
 
-        
         addButton.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
     }
 
+    // MARK: - Button Actions
     @objc
     private func addButtonPressed() {
         guard let text = wishTextView.text, !text.isEmpty else { return }
         addWish?(text)
-        wishTextView.text = ""  // Clear the text view after adding
+        wishTextView.text = ""
     }
 }

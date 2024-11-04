@@ -5,15 +5,34 @@
 //  Created by Ulyana Eskova on 04.11.2024.
 //
 
+import Foundation
+
 
 struct WishModel {
-    var wishes: [String] = ["I wish to add cells to the table"]
-    
+    // MARK: - Fields
+    private let defaults = UserDefaults.standard
+    private let wishesKey = "wishesKey"
+
+    // MARK: - Properties
+    var wishes: [String] {
+        get {
+            return defaults.array(forKey: wishesKey) as? [String] ?? []
+        }
+        set {
+            defaults.set(newValue, forKey: wishesKey)
+        }
+    }
+
+    // MARK: - Public methods
     mutating func addWish(_ wish: String) {
-        wishes.append(wish)
+        var currentWishes = wishes
+        currentWishes.append(wish)
+        wishes = currentWishes
     }
     
     mutating func removeWish(at index: Int) {
-        wishes.remove(at: index)
+        var currentWishes = wishes
+        currentWishes.remove(at: index)
+        wishes = currentWishes
     }
 }
