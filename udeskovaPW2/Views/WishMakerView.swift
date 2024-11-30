@@ -28,7 +28,7 @@ final class WishMakerView: UIView {
     let scheduleWishesButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
-        button.setTitleColor(.systemGray6, for: .normal)
+        button.setTitleColor(.systemPink, for: .normal)
         button.setTitle(WishMakerButtonConstants.scheduleMissionsTitle, for: .normal)
         button.layer.cornerRadius = WishMakerButtonConstants.buttonRadius
         button.translatesAutoresizingMaskIntoConstraints = false

@@ -19,13 +19,10 @@ final class WishMakerViewController: UIViewController {
     private func configureActions() {
         wishMakerView.toggleButton.addTarget(self, action: #selector(toggleSliders), for: .touchUpInside)
         
-        // Add wish button action
         wishMakerView.addMoreWishesButton.addTarget(self, action: #selector(addMoreWishesPressed), for: .touchUpInside)
         
-        // Schedule wish button action
         wishMakerView.scheduleWishesButton.addTarget(self, action: #selector(scheduleMissionsPressed), for: .touchUpInside)
         
-        // Slider value change handlers
         for slider in wishMakerView.stack.arrangedSubviews.compactMap({ $0 as? CustomSlider }) {
             slider.valueChanged = { [weak self] value in
                 guard let self = self else { return }
@@ -67,7 +64,7 @@ final class WishMakerViewController: UIViewController {
     }
     
     @objc private func scheduleMissionsPressed() {
-        let scheduleViewController = ScheduleViewController()
-        present(scheduleViewController, animated: true)
+        let vc = WishCalendarViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
