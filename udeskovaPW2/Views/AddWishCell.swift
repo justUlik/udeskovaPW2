@@ -14,7 +14,7 @@ final class AddWishCell: UITableViewCell {
     private let wishTextView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .systemGray6
-        textView.layer.cornerRadius = AddWishButtonConstants.buttonRadius
+        textView.layer.cornerRadius = WishMakerButtonConstants.buttonRadius
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
