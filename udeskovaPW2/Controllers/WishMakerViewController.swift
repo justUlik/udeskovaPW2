@@ -39,12 +39,18 @@ final class WishMakerViewController: UIViewController {
                 default: break
                 }
                 self.updateBackgroundColor()
+                self.updateColorButtonTextLabel()
             }
         }
     }
     
     private func updateBackgroundColor() {
         view.backgroundColor = colorModel.uiColor
+    }
+    
+    private func updateColorButtonTextLabel() {
+        wishMakerView.addMoreWishesButton.setTitleColor(colorModel.uiColor, for: .normal)
+        wishMakerView.scheduleWishesButton.setTitleColor(colorModel.uiColor, for: .normal)
     }
     
     // MARK: - Action Methods
