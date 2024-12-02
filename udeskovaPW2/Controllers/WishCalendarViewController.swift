@@ -1,28 +1,45 @@
 import UIKit
 
-final class WishCalendarViewController: UIViewController {
+final class WishCalendarViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Properties
     let headingView = WishCalendarHeading()
-    
+
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = WishCellConstants.minimumLineSpacing
         layout.minimumInteritemSpacing = WishCellConstants.minimumInteritemSpacing
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
+    
+    var viewModel = WishCalendarViewModel()
+
+    private let noWishesLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = WishEventCreationViewConstants.noDataLabel
+        label.font = WishEventCreationViewConstants.noDataLabelFont
+        label.textColor = WishEventCreationViewConstants.noDataLabelColor
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureHeading()
         configureCollection()
+        configureNavigationBar()
+        configureNoWishesLabel()
+        updateNoWishesLabelVisibility()
     }
-    
+
     // MARK: - Private methods
     private func configureUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = WishEventCreationViewConstants.viewBackgroundColor
     }
-    
+
     private func configureHeading() {
         view.addSubview(headingView)
         headingView.pinTop(to: view.safeAreaLayoutGuide.topAnchor, WishCalendarHeadingConstants.topPadding)
@@ -45,7 +62,29 @@ final class WishCalendarViewController: UIViewController {
         collectionView.pinBottom(to: view.bottomAnchor)
     }
 
+    private func configureNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(didTapAddButton)
+        )
+    }
 
+    private func configureNoWishesLabel() {
+        view.addSubview(noWishesLabel)
+        noWishesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        noWishesLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+
+    private func updateNoWishesLabelVisibility() {
+        noWishesLabel.isHidden = !viewModel.shouldShowNoEventsLabel()
+    }
+
+    @objc private func didTapAddButton() {
+        let creationVC = WishEventCreationView()
+        creationVC.delegate = self
+        present(creationVC, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -54,7 +93,7 @@ extension WishCalendarViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return 10
+        return viewModel.getEventCount()
     }
 
     func collectionView(
@@ -65,21 +104,14 @@ extension WishCalendarViewController: UICollectionViewDataSource {
             withReuseIdentifier: WishEventCell.reuseIdentifier,
             for: indexPath
         )
-        
+
         guard let wishEventCell = cell as? WishEventCell else {
             return cell
         }
-        
-    
-        wishEventCell.configure(
-            with: WishEventModel(
-                title: "Test \(indexPath.item)",
-                description: "Description \(indexPath.item)",
-                startDate: .now,
-                endDate: .now
-            )
-        )
-        
+
+        let event = viewModel.getEvent(at: indexPath.item)
+        wishEventCell.configure(with: event)
+
         return wishEventCell
     }
 }
@@ -100,5 +132,14 @@ extension WishCalendarViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         print("Cell tapped at index \(indexPath.item)")
+    }
+}
+
+// MARK: - WishEventCreationViewDelegate
+extension WishCalendarViewController: WishEventCreationViewDelegate {
+    func didCreateNewEvent(_ event: WishEventModel) {
+        viewModel.addEvent(event)
+        collectionView.reloadData()
+        updateNoWishesLabelVisibility()
     }
 }
