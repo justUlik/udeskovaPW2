@@ -1,13 +1,12 @@
 //
-//  HeadingConstants.swift
+//  WishMakerHeadingConstants.swift
 //  udeskovaPW2
 //
-//  Created by Ulyana Eskova on 03.11.2024.
+//  Created by Ulyana Eskova on 02.12.2024.
 //
-
 import UIKit
 
-enum HeadingConstants {
+enum WishMakerHeadingConstants {
     static let titleLeadingOffset: CGFloat = 20
     static let titleTopOffset: CGFloat = 30
     static let descriptionLeadingOffset: CGFloat = 20

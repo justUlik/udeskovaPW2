@@ -8,7 +8,7 @@ import UIKit
 
 final class WishMakerView: UIView {
     // MARK: - UI Components
-    let headingView = Heading()
+    let headingView = WishMakerHeading()
     let toggleButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(ToggleConstants.toggleButtonTitleHide, for: .normal)
