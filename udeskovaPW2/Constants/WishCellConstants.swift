@@ -24,7 +24,7 @@ enum WishCellConstants {
     static let titleLabelFontSize: CGFloat = 16
     static let descriptionLabelFontSize: CGFloat = 14
     static let dateLabelFontSize: CGFloat = 12
-    static let dateFormat = "dd.MM.yyyy"
+    static let dateFormat = "dd.MM.yyyy hh:mm"
     static let spacing: CGFloat = 8
     static let horizontalPadding: CGFloat = 16
     static let verticalPadding: CGFloat = 16

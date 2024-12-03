@@ -3,6 +3,8 @@ import UIKit
 final class WishCalendarViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Properties
     let headingView = WishCalendarHeading()
+    
+    private let calendarManager = CalendarManager()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -138,8 +140,34 @@ extension WishCalendarViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - WishEventCreationViewDelegate
 extension WishCalendarViewController: WishEventCreationViewDelegate {
     func didCreateNewEvent(_ event: WishEventModel) {
+        // Add the event to the local ViewModel
         viewModel.addEvent(event)
         collectionView.reloadData()
         updateNoWishesLabelVisibility()
+
+        // Map the WishEventModel to CalendarEventModel
+        let calendarEvent = WishEventModel(
+            title: event.title,
+            description: event.description,
+            startDate: event.startDate,
+            endDate: event.endDate
+        )
+
+        calendarManager.create(eventModel: calendarEvent) { success in
+            if success {
+                print("Event successfully added to the calendar.")
+            } else {
+                print("Failed to add event to the calendar.")
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(
+                        title: "Error",
+                        message: "The event could not be saved to your calendar. Please check your calendar permissions.",
+                        preferredStyle: .alert
+                    )
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }

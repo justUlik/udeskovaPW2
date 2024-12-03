@@ -24,4 +24,9 @@ enum WishEventCreationViewConstants {
     static let titleAlert: String = "Missing Information"
     static let descriptionAlert: String = "Please enter both a title and a description for the event."
     static let buttonAlert: String = "OK"
+    static let datePickerTopOffset: CGFloat = 20
+    
+    static let errorAlertTitle: String = "Invalid Date Range"
+    static let errorAlertMessage: String = "The end date must be later than the start date"
+    
 }
